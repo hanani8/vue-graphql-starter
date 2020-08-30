@@ -5,7 +5,7 @@ import { ApolloClient, createNetworkInterface }
 // with a network interface
 const apolloClient = new ApolloClient({
   networkInterface: createNetworkInterface({
-    uri: 'https://nnnwvmq07.lp.gql.zone/graphql',
+		uri: 'http://localhost:3000/graphql',
     transportBatching: true,
   }),
   connectToDevTools: true,

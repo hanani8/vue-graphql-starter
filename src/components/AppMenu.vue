@@ -2,6 +2,9 @@
 	<nav class="app-menu">
 		<router-link class="link" :to="{ name: 'home' }" exact>Home</router-link>
 		<router-link class="link" :to="{ name: 'about' }">About</router-link>
+		<router-link class="link" :to="{ name: 'ciao' }">Ciao</router-link>
+		<router-link class="link" :to="{ name: 'rooms' }">Rooms</router-link>
+
 	</nav>
 </template>
 

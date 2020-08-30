@@ -4,7 +4,7 @@
 
 		<section v-if="enableCounter" class="counter">
 			<label>
-				<input type="checkbox" v-model="showCounter"></input>
+				<input type="checkbox" v-model="showCounter">
 				Show counter
 			</label>
 			
