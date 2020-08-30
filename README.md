@@ -1,4 +1,4 @@
-# Vue Graphql Demo - VueConf 2017
+<!-- # Vue Graphql Demo - VueConf 2017
 
 ![schema](https://cdn-images-1.medium.com/max/800/1*H9AANoofLqjS10Xd5TwRYw.png)
 
@@ -24,4 +24,4 @@ npm run dev
 
 ```
 npm run build
-```
+``` -->
