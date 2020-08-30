@@ -35,5 +35,7 @@ export default {
 </script>
 
 
-<style lang="stylus" src="../style/app.stylus"></style>
+<style lang="scss" >
+@import '@/design/index.scss';
+</style>
 
