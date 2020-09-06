@@ -10,19 +10,24 @@
           <header class="card-header has-text-centered">
             <p class="card-header-title">Rooms list</p>
           </header>
-          <ul class="list is-hoverable has-text-centered">
-            <li v-for="room in queryRooms" :key="room.id">
-              <a
-                class="list-item"
-                @click="selectedRoom = room"
-                :class="{'is-active': selectedRoom == room}"
-              >
-                <span>{{room.name}}</span>
-              </a>
-            </li>
-          </ul>
+
+          <div v-if="loading" class="loading">Loading...</div>
+          <div v-if="error" class="error">{{ error }}</div>
+          <div v-if="queryRooms">
+            <ul class="list is-hoverable has-text-centered">
+              <li v-for="room of queryRooms" :key="room.id">
+                <a
+                  class="list-item"
+                  @click="selectedRoom = room"
+                  :class="{'is-active': selectedRoom == room}"
+                >
+                  <span>{{room.name}}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div v-if="selectedRoom" class="column is-8">
+        <!-- <div v-if="selectedRoom" class="column is-8">
           <header class="card-header">
             <p class="card-header-title">{{ selectedRoom.firstName }}</p>
           </header>
@@ -55,7 +60,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
   </div>
@@ -64,63 +69,63 @@
 <script>
 import gql from "graphql-tag";
 
-apollo: {
-  queryRooms: ROOMS_QUERY;
-}
+const ROOMS_QUERY = gql`
+  query queryMyRooms {
+    queryRooms(
+      coordinates: [$lng, $lat]
+      selectedCurriculum: $topic
+      maxDistance: 3000000000000000000000000000
+    ) {
+      name
+    }
+  }
+`;
 
 export default {
   name: "Rooms",
   data() {
     return {
+      loading: false,
+      queryRooms: null,
+      error: null,
+      alng: this.$route.query.lng,
+     alat: this.$route.query.lat,
+      atopic: this.$route.query.topic
       // selectedRoom: undefined,
-      // rooms: [
-      //   {
-      //     id: 10,
-      //     firstName: "Ella",
-      //     lastName: "Papa",
-      //     description: "fashionista"
-      //   },
-      //   {
-      //     id: 20,
-      //     firstName: "Madelyn",
-      //     lastName: "Papa",
-      //     description: "the cat whisperer"
-      //   },
-      //   {
-      //     id: 30,
-      //     firstName: "Haley",
-      //     lastName: "Papa",
-      //     description: "pen wielder"
-      //   },
-      //   {
-      //     id: 40,
-      //     firstName: "Landon",
-      //     lastName: "Papa",
-      //     description: "arc trooper"
-      //   }
-      // ]
     };
   },
-  beforeMount() {
-    topic: this.$route.query.topic;
-    lng: this.$route.lng;
-    lat: this.$route.lat;
 
-    const ROOMS_QUERY = gql`
-      {
-        queryRooms(
-          coordinates: [lng, lat]
-          selectedCurriculum: topic
-          maxDistance: 3000000000000000000000000000
-        ) {
-          name
-        }
+  apollo: {
+    queryRooms: {
+      query: ROOMS_QUERY,
+      variables() {
+        return {
+          lng: this.alng,
+          lat: this.alat,
+          topic: this.atopic
+        };
       }
-    `;
+      //
+    }
   },
+
+  created() {
+    console.log(this.$route.query.lng);
+    // fetch the data when the view is created and the data is
+    // already being observed
+    this.fetchData();
+  },
+  watch: {
+    // call again the method if the route changes
+    $route: "fetchData"
+  },
+
   methods: {
-    links() {
-      console.log(this.$route.query);
+    fetchData() {
+      // this.error = this.queryRooms = null;
+      console.log("fetch");
+
+      this.loading = true;
     }
   }
 };
