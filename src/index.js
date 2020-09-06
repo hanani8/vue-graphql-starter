@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import App from './components/App.vue'
+import App from '@/components/App';
+
 import router from './router'
 import apolloProvider from './apollo-provider'
 import './supply'
@@ -30,4 +31,4 @@ new Vue({
 	// Inject the store & the supply cache
 	store,
 	supplyCache,
-})
+}).$mount('#app');

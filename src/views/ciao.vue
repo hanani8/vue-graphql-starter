@@ -1,8 +1,8 @@
 <template>
   <div class="content-container">
     <div class="columns">
-      <div class="column is-2"></div>
-      <div class="column is-8">
+      <div class="column is-1"></div>
+      <div class="column is-10">
         <div class="section content-title-group">
           <h2 class="title">Welcome</h2>
         </div>
@@ -12,8 +12,14 @@
               class="card-header-title"
             >{{ coordinates.lat }} Latitude , {{coordinates.lng}} Longitude</p>
           </header>
-          <div class="card-content">
+          <div class="card-content" style="height: 500px">
             <div class="content">
+              <div v-if="allset">
+                <header>
+                  <h1>SCSSSSS fucknig hell</h1>
+                </header>
+              </div>
+
               <!-- <div class="field">
                 <label class="label" for="id">id</label>
                 <label class="input" id="id" readonly>{{ hero.id }}</label>
@@ -46,28 +52,32 @@
                 </label>
                 <div class="color-line" :style="{ 'background-color': hero.capeColor }"></div>
               </div>-->
-              <div class="field">
+
+              <div class="field has-text-centered" style="margin-top: 10rem;">
                 <label for="power">
-                  Select topic
-                  <div class="select is-primary">
+                  <!-- Select topic -->
+                  <div class="select is-primary is-rounded">
                     <select
-                      id="power"
-                      v-model="hero.power"
-                      :class="{ invalid: !hero.power }"
-                      @keyup.esc="clearPower"
+                      id="topic"
+                      v-model="hero.topic"
+                      :class="{ invalid: !hero.topic }"
+                      @keyup.esc="clearTopic"
                     >
                       <option disabled value>Please select one</option>
-                      <option>Web</option>
-                      <option>Flight</option>
-                      <option>Strength</option>
-                      <option>Invisibility</option>
+                      <option>Mathematics</option>
+                      <option>Computer Science</option>
+
+                      <option>Statistics for Data Science I</option>
+                      <option>Computational Thinking</option>
+                      <option>English I</option>
+
                     </select>
                   </div>
                 </label>
               </div>
-              <div class="field">
+              <!-- <div class="field">
                 <label class="checkbox" for="active">
-                  Subscribe Newsletter
+                  Subscribe to hear latest news.
                   <input
                     type="checkbox"
                     class="is-primary"
@@ -75,15 +85,7 @@
                     v-model="hero.active"
                   />
                 </label>
-              </div>
-
-<!--               
-              <gmap-map
-                :center="{lat:10, lng:10}"
-                :zoom="7"
-                map-type-id="terrain"
-                style="width:640px; height:360px;"
-              ></gmap-map> -->
+              </div>-->
             </div>
           </div>
           <footer class="card-footer">
@@ -93,7 +95,7 @@
             </button>
             <button class="link card-footer-item" @click="saveHero()">
               <i class="fas fa-save"></i>
-              <span>Save</span>
+              <span>Go</span>
             </button>
           </footer>
         </div>
@@ -111,15 +113,15 @@ export default {
   data() {
     return {
       hero: {
-        power: "",
-        active: true
+        topic: ""
       },
 
       coordinates: {
         lat: 0,
         lng: 0
       },
-      message: ""
+      message: "",
+      allset: false
     };
   },
   created() {
@@ -127,24 +129,41 @@ export default {
     this.$getLocation({})
       .then(coordinates => {
         this.coordinates = coordinates;
+        console.log(coordinates);
       })
       .catch(err => alert(err));
   },
 
   methods: {
-    cancelHero() {
-      this.message = "";
-    },
-    clearPower() {
-      this.hero.power = "";
+    clearTopic() {
+      this.hero.topic = "";
     },
     saveHero() {
+      this.allset = false;
+
       // This only updates when you click the save button
       // this.message = JSON.stringify(this.hero, null, "\n ");
-			// console.log(this.message);
-      console.log(this.hero);
-			
+      // console.log(this.message);
+      console.log(this.hero.topic);
+      if (!this.hero.topic || !this.coordinates) {
+        this.allset = true;
+        console.log("fill it up");
+      } else {
+        this.allset = false;
+        let topic = this.hero.topic;
+        let lng = this.coordinates.lng;
+        let lat = this.coordinates.lat;
+
+        this.$router.push({
+          path: `/rooms`,
+          query: { topic: topic, lng: lng, lat: lat }
+        });
+      }
     }
   }
 };
 </script>
+
+<style lang="scss" >
+@import "@/design/index.scss";
+</style>
